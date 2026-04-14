@@ -1,0 +1,32 @@
+[package]
+name = "rustforge"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "rustforge"
+path = "src/lib.rs"
+
+[[bin]]
+name = "rustforge"
+path = "src/main.rs"
+
+[dependencies]
+nalgebra = "0.33"
+ndarray = "0.15"
+clap = { version = "4", features = ["derive"] }
+
+[[bin]]
+name = "analyze"
+path = "src/bin/analyze.rs"
+
+[[bin]]
+name = "benchmark"
+path = "src/bin/benchmark.rs"
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+
+[[bench]]
+name = "migration_benchmarks"
+harness = false

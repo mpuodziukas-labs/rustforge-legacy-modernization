@@ -1,0 +1,32 @@
+# Rust build artifacts
+target/
+**/*.rs.bk
+
+# Internal local files
+PROJECT_MANIFEST.md
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Test outputs
+report.txt
+transactions.dat
+*.o
+*.so
+*.a
+
+# Compiler outputs
+*.cob.out
+*.f90.out
+*.exe
+
+# Compiled COBOL benchmark binaries (sources tracked in cobol/bench_*.cob)
+cobol/bench_account_balance
+cobol/bench_batch_processor
+cobol/bench_report
+cobol/account_balance_bin

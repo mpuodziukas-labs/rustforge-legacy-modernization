@@ -1,0 +1,68 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. ACCOUNT-BALANCE.
+
+       ENVIRONMENT DIVISION.
+       CONFIGURATION SECTION.
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
+
+       DATA DIVISION.
+       FILE SECTION.
+
+       WORKING-STORAGE SECTION.
+       01 WS-ACCOUNT-ID           PIC 9(8) VALUE 0.
+       01 WS-OPENING-BALANCE      PIC S9(9)V99 COMP-3 VALUE 0.
+       01 WS-TRANSACTION-AMOUNT   PIC S9(9)V99 COMP-3 VALUE 0.
+       01 WS-RUNNING-BALANCE      PIC S9(9)V99 COMP-3 VALUE 0.
+       01 WS-INTEREST-RATE        PIC 9V9(4) COMP-3 VALUE 0.035.
+       01 WS-INTEREST-EARNED      PIC S9(9)V99 COMP-3 VALUE 0.
+       01 WS-NEW-BALANCE          PIC S9(9)V99 COMP-3 VALUE 0.
+       01 WS-FORMATTED-BALANCE    PIC -(9)9.99.
+       01 WS-FORMATTED-INTEREST   PIC -(9)9.99.
+       01 WS-EOF-FLAG             PIC X VALUE 'N'.
+       01 WS-REPORT-DATE          PIC X(10) VALUE '04-13-2026'.
+
+       PROCEDURE DIVISION.
+       MAIN-PROCEDURE.
+           PERFORM PROCESS-ACCOUNT.
+           STOP RUN.
+
+       PROCESS-ACCOUNT.
+           MOVE 100000 TO WS-OPENING-BALANCE.
+           MOVE 50000 TO WS-TRANSACTION-AMOUNT.
+           MOVE 0.035 TO WS-INTEREST-RATE.
+
+           PERFORM CALCULATE-BALANCE.
+           PERFORM APPLY-INTEREST.
+           PERFORM DISPLAY-REPORT.
+
+       CALCULATE-BALANCE.
+           ADD WS-TRANSACTION-AMOUNT TO WS-OPENING-BALANCE
+               GIVING WS-RUNNING-BALANCE.
+
+       APPLY-INTEREST.
+           COMPUTE WS-INTEREST-EARNED =
+               WS-RUNNING-BALANCE * WS-INTEREST-RATE.
+           COMPUTE WS-NEW-BALANCE =
+               WS-RUNNING-BALANCE + WS-INTEREST-EARNED.
+
+       DISPLAY-REPORT.
+           MOVE WS-NEW-BALANCE TO WS-FORMATTED-BALANCE.
+           MOVE WS-INTEREST-EARNED TO WS-FORMATTED-INTEREST.
+
+           DISPLAY "====================================".
+           DISPLAY "ACCOUNT BALANCE REPORT".
+           DISPLAY "Date: " WS-REPORT-DATE.
+           DISPLAY "====================================".
+           DISPLAY "Opening Balance:  $"
+               FUNCTION NUMVAL-C("$100000.00").
+           DISPLAY "Transaction:      $"
+               FUNCTION NUMVAL-C("$50000.00").
+           DISPLAY "Running Balance:  $"
+               FUNCTION NUMVAL-C("$150000.00").
+           DISPLAY "Interest Rate:    3.5%".
+           DISPLAY "Interest Earned:  $"
+               WS-FORMATTED-INTEREST.
+           DISPLAY "Final Balance:    $"
+               WS-FORMATTED-BALANCE.
+           DISPLAY "====================================".
