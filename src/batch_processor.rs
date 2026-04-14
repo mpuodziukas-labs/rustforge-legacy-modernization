@@ -1,6 +1,6 @@
-/// Batch Processor Module
-/// Rust translation of COBOL batch_processor.cob
-/// Processes transaction records and produces summary totals
+//! Batch Processor Module
+//! Rust translation of COBOL batch_processor.cob
+//! Processes transaction records and produces summary totals
 
 use std::fs::File;
 use std::io::{BufRead, BufReader};
@@ -22,7 +22,7 @@ impl Transaction {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct BatchSummary {
     pub total_debits: f64,
     pub total_credits: f64,
@@ -81,7 +81,7 @@ pub fn process_from_file(filename: &str) -> std::io::Result<BatchSummary> {
 
 /// Parse transaction line: "ACCOUNT_ID AMOUNT TYPE"
 pub fn parse_transaction_line(line: &str) -> Result<Transaction, String> {
-    let parts: Vec<&str> = line.trim().split_whitespace().collect();
+    let parts: Vec<&str> = line.split_whitespace().collect();
 
     if parts.len() < 3 {
         return Err("Invalid transaction format".to_string());

@@ -1,7 +1,7 @@
-/// Loan Calculator Module — MOD-003
-/// Rust translation of COBOL loan_calculator.cob
-/// Computes amortizing loan payments with full amortization schedule.
-/// Formula parity: matches COBOL COMPUTE statements exactly.
+//! Loan Calculator Module — MOD-003
+//! Rust translation of COBOL loan_calculator.cob
+//! Computes amortizing loan payments with full amortization schedule.
+//! Formula parity: matches COBOL COMPUTE statements exactly.
 
 /// Input parameters for a fixed-rate amortising loan.
 #[derive(Debug, Clone)]
@@ -39,7 +39,7 @@ pub struct LoanResult {
 ///
 /// # Arguments
 /// * `params` - [`LoanParams`] containing principal (dollars), annual rate (percent),
-///              and term (months)
+///   and term (months)
 ///
 /// # Returns
 /// A [`LoanResult`] with monthly payment, total payment, total interest, and the

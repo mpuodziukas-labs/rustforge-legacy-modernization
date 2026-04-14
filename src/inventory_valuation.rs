@@ -1,6 +1,6 @@
-/// Inventory Valuation Module — MOD-004
-/// Rust translation of COBOL inventory_valuation.cob
-/// FIFO (First-In, First-Out) inventory costing for ERP/mainframe migration.
+//! Inventory Valuation Module — MOD-004
+//! Rust translation of COBOL inventory_valuation.cob
+//! FIFO (First-In, First-Out) inventory costing for ERP/mainframe migration.
 
 use std::collections::VecDeque;
 

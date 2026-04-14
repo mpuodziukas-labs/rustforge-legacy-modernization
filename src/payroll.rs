@@ -1,9 +1,9 @@
-/// Payroll Calculator — MOD-008
-///
-/// Rust translation of `cobol/payroll.cob`.
-/// Computes gross pay (with 1.5× overtime over 40 hrs), federal income-tax
-/// withholding (bracket-based, Single/MFJ/MFS filers), FICA (Social Security
-/// + Medicare), and net pay.
+//! Payroll Calculator — MOD-008
+//!
+//! Rust translation of `cobol/payroll.cob`.
+//! Computes gross pay (with 1.5× overtime over 40 hrs), federal income-tax
+//! withholding (bracket-based, Single/MFJ/MFS filers), FICA (Social Security
+//! + Medicare), and net pay.
 
 /// Filing status for federal income-tax bracket selection.
 #[derive(Debug, Clone, PartialEq)]

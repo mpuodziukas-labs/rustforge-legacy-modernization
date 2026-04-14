@@ -1,7 +1,7 @@
-/// RustForge Migration Error Types
-///
-/// Production-grade error handling for legacy migration pipelines.
-/// All public functions that can fail return `Result<T, MigrationError>`.
+//! RustForge Migration Error Types
+//!
+//! Production-grade error handling for legacy migration pipelines.
+//! All public functions that can fail return `Result<T, MigrationError>`.
 
 use std::fmt;
 

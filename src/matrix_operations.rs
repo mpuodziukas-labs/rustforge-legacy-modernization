@@ -1,6 +1,6 @@
-/// Matrix Operations Module
-/// Rust translation of Fortran matrix_operations.f90
-/// Implements matrix multiplication, LU decomposition, and Gaussian elimination
+//! Matrix Operations Module
+//! Rust translation of Fortran matrix_operations.f90
+//! Implements matrix multiplication, LU decomposition, and Gaussian elimination
 
 pub struct MatrixOps;
 
@@ -56,8 +56,8 @@ impl MatrixOps {
         }
 
         // Set diagonal of L to 1
-        for i in 0..n {
-            l[i][i] = 1.0;
+        for (i, row) in l.iter_mut().enumerate().take(n) {
+            row[i] = 1.0;
         }
 
         (l, u)
@@ -81,22 +81,17 @@ impl MatrixOps {
 
             // Swap rows if needed
             if pivot_row != k {
-                for j in k..n {
-                    let temp = a[k][j];
-                    a[k][j] = a[pivot_row][j];
-                    a[pivot_row][j] = temp;
-                }
-                let temp = b[k];
-                b[k] = b[pivot_row];
-                b[pivot_row] = temp;
+                a.swap(k, pivot_row);
+                b.swap(k, pivot_row);
             }
 
             // Eliminate below pivot
             for i in k + 1..n {
                 if a[k][k].abs() > 1e-15 {
                     let factor = a[i][k] / a[k][k];
-                    for j in k..n {
-                        a[i][j] -= factor * a[k][j];
+                    let pivot_row_copy: Vec<f64> = a[k][k..n].to_vec();
+                    for (j, &pivot_val) in pivot_row_copy.iter().enumerate() {
+                        a[i][k + j] -= factor * pivot_val;
                     }
                     b[i] -= factor * b[k];
                 }

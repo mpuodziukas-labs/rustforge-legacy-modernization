@@ -1,9 +1,9 @@
-/// GL Journal Entry Validator — MOD-009
-///
-/// Rust translation of `cobol/gl_validator.cob`.
-/// Validates double-entry bookkeeping journal entries: the sum of debits must
-/// equal the sum of credits, amounts must be positive, and account codes must
-/// be non-empty.
+//! GL Journal Entry Validator — MOD-009
+//!
+//! Rust translation of `cobol/gl_validator.cob`.
+//! Validates double-entry bookkeeping journal entries: the sum of debits must
+//! equal the sum of credits, amounts must be positive, and account codes must
+//! be non-empty.
 
 /// A single double-entry journal line item.
 #[derive(Debug, Clone)]
@@ -166,6 +166,7 @@ pub fn validate_single_entry(entry: &JournalEntry) -> Vec<String> {
 
 // ---- helpers ----------------------------------------------------------------
 
+#[allow(dead_code)]
 fn make_entry(id: u32, debit: &str, credit: &str, amount: f64) -> JournalEntry {
     JournalEntry {
         entry_id: id,

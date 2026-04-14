@@ -1,4 +1,5 @@
 /// Parity testing utilities for verifying equivalence between legacy and Rust implementations
+#[allow(clippy::module_inception)]
 pub mod parity {
     /// Assert floating-point parity within tolerance
     pub fn assert_parity_f64(cobol_result: f64, rust_result: f64, tolerance: f64) -> bool {

@@ -1,7 +1,8 @@
-/// Report Generator Module
-/// Rust translation of COBOL report_generator.cob
-/// Generates formatted transaction reports
+//! Report Generator Module
+//! Rust translation of COBOL report_generator.cob
+//! Generates formatted transaction reports
 
+use std::fmt;
 use std::fs::File;
 use std::io::Write;
 
@@ -73,31 +74,6 @@ impl Report {
         )
     }
 
-    pub fn to_string(&self) -> String {
-        let mut output = String::new();
-
-        output.push_str(&self.format_header());
-        output.push('\n');
-        output.push_str(&self.format_separator());
-        output.push('\n');
-        output.push_str(&self.format_column_headers());
-        output.push('\n');
-        output.push_str(&self.format_separator());
-        output.push('\n');
-
-        for transaction in &self.transactions {
-            output.push_str(&transaction.format());
-            output.push('\n');
-        }
-
-        output.push_str(&self.format_separator());
-        output.push('\n');
-        output.push_str(&self.format_footer());
-        output.push('\n');
-
-        output
-    }
-
     pub fn write_to_file(&self, filename: &str) -> std::io::Result<()> {
         let mut file = File::create(filename)?;
         file.write_all(self.to_string().as_bytes())?;
@@ -105,7 +81,23 @@ impl Report {
     }
 
     pub fn display(&self) {
-        println!("{}", self.to_string());
+        println!("{}", self);
+    }
+}
+
+impl fmt::Display for Report {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.format_header())?;
+        write!(f, "\n{}", self.format_separator())?;
+        write!(f, "\n{}", self.format_column_headers())?;
+        write!(f, "\n{}", self.format_separator())?;
+        writeln!(f)?;
+        for transaction in &self.transactions {
+            writeln!(f, "{}", transaction.format())?;
+        }
+        write!(f, "{}", self.format_separator())?;
+        write!(f, "\n{}", self.format_footer())?;
+        writeln!(f)
     }
 }
 

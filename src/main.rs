@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 mod account_balance;
 mod batch_processor;
 mod cobol_analyzer;
@@ -123,7 +124,7 @@ fn demo_eigenvalue_solver() {
     let av = solver.matvec(&matrix, &eigenvector);
     let mut max_error = 0.0;
     for (avi, vi) in av.iter().zip(eigenvector.iter()) {
-        let error = (avi - eigenvalue * vi).abs() as f64;
+        let error = (avi - eigenvalue * vi).abs();
         if error > max_error {
             max_error = error;
         }

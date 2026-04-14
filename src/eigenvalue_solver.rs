@@ -1,6 +1,6 @@
-/// Eigenvalue Solver Module
-/// Rust translation of Fortran eigenvalue_solver.f90
-/// Implements power iteration method for computing dominant eigenvalue
+//! Eigenvalue Solver Module
+//! Rust translation of Fortran eigenvalue_solver.f90
+//! Implements power iteration method for computing dominant eigenvalue
 
 pub struct PowerIterationSolver {
     pub max_iterations: usize,
@@ -13,7 +13,7 @@ impl PowerIterationSolver {
     /// # Arguments
     /// * `max_iterations` - Maximum number of power-iteration steps before giving up
     /// * `tolerance`      - Convergence threshold: iteration stops when the change in
-    ///                      the Rayleigh-quotient eigenvalue estimate falls below this value
+    ///   the Rayleigh-quotient eigenvalue estimate falls below this value
     ///
     /// # Example
     /// ```

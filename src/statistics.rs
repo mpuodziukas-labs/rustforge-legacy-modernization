@@ -1,7 +1,7 @@
-/// Statistical Report Generator — MOD-005
-/// Rust translation of Fortran 90 statistics.f90
-/// Mirrors Fortran DO-loop formula for variance and median exactly.
-/// Parity guaranteed within 1e-10 of gfortran output.
+//! Statistical Report Generator — MOD-005
+//! Rust translation of Fortran 90 statistics.f90
+//! Mirrors Fortran DO-loop formula for variance and median exactly.
+//! Parity guaranteed within 1e-10 of gfortran output.
 
 /// Descriptive statistics for a data slice.
 #[derive(Debug, Clone, PartialEq)]
@@ -86,7 +86,7 @@ pub fn compute_stats(data: &[f64]) -> Option<Stats> {
 
 /// Compute the p-th percentile (0.0–100.0) of the data using linear interpolation.
 /// Sorts `data` in-place as a side effect (matches caller ownership semantics).
-pub fn compute_percentile(data: &mut Vec<f64>, p: f64) -> f64 {
+pub fn compute_percentile(data: &mut [f64], p: f64) -> f64 {
     assert!((0.0..=100.0).contains(&p), "Percentile must be 0..=100");
     assert!(!data.is_empty(), "Cannot compute percentile of empty data");
 

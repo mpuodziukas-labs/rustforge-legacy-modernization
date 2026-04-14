@@ -1,7 +1,7 @@
-/// COBOL Migration Analyzer
-///
-/// Performs a genuine lexical scan of COBOL source files and produces
-/// quantitative metrics that feed the RustForge migration report.
+//! COBOL Migration Analyzer
+//!
+//! Performs a genuine lexical scan of COBOL source files and produces
+//! quantitative metrics that feed the RustForge migration report.
 
 pub struct MigrationReport {
     pub filename: String,
@@ -227,7 +227,7 @@ fn count_keyword(source: &str, keyword: &str) -> usize {
 /// # Arguments
 /// * `source`  - Full COBOL source text as a `&str`
 /// * `verbose` - Verbosity level: `0` = silent, `1` = summary to stderr,
-///               `2` = debug line counts to stderr
+///   `2` = debug line counts to stderr
 ///
 /// # Returns
 /// A [`MigrationReport`] with `filename` left as an empty string (caller should set it).
