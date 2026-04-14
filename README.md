@@ -290,7 +290,7 @@ For a mid-tier bank running 50M COBOL transactions/day:
 | Compliance remediation | $2.1M/yr avg (FFIEC) | $0 (type-system enforced) | **-$2.1M/yr** |
 | **5-year NPV** | — | — | **$17.5M+** |
 
-These are conservative estimates based on public Federal Reserve and FFIEC cost disclosures. Migration engagement cost is recovered in Year 1.
+*Illustrative scenario based on publicly available mainframe economics data (Federal Reserve, FFIEC cost surveys). Actual savings depend on transaction volume, existing tooling, team ramp time, and compliance scope. Not a guarantee or projection for any specific engagement.*
 
 ---
 
@@ -304,7 +304,6 @@ Available for:
 
 Stack: Rust · COBOL · Fortran · Systems Architecture · Zero-Downtime Migration
 Verticals: Financial services · Scientific computing · Government (USDA/NOAA/DOE)
-Target clients: Luxoft · Unum · JPMorgan · Capgemini · USDA/Dynamo · Federal agencies
 
 Contact: Remote (US) | Async-preferred | Response <24h
 GitHub: github.com/mpuodziukas-labs
