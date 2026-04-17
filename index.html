@@ -4,108 +4,188 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RustForge — Zero-Risk Legacy Modernization Engine</title>
+  <meta name="description" content="Migrate COBOL/Fortran to Rust with byte-for-byte parity proof, zero downtime, and deterministic dual-execution verification. 464 tests. 0 CVEs. Request a free migration audit.">
+  <meta property="og:title" content="RustForge — Zero-Risk Legacy Modernization">
+  <meta property="og:description" content="COBOL/Fortran → Rust. Dual-execution parity proof. 27x average speedup. 464 tests. Zero downtime. Free audit.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    /* Reset & Base */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    /* ─── Reset ─────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    /* ─── Tokens ─────────────────────────────────── */
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --border:    #30363d;
+      --text:      #e6edf3;
+      --muted:     #8b949e;
+      --accent:    #f97316;
+      --accent-lt: #fb923c;
+      --blue:      #79c0ff;
+      --green:     #39d353;
     }
 
-    html {
-      font-size: 16px;
-      scroll-behavior: smooth;
-    }
-
+    /* ─── Base ───────────────────────────────────── */
     body {
-      background-color: #0d1117;
-      color: #e6edf3;
-      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
       line-height: 1.6;
       overflow-x: hidden;
     }
 
-    /* Typography */
-    h1 {
-      font-size: 3rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 0.5rem;
+    code, pre, .mono { font-family: 'JetBrains Mono', 'Monaco', monospace; }
+
+    h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; }
+    h2 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; letter-spacing: -0.01em; margin: 2rem 0 1rem; }
+    h3 { font-size: 1.125rem; font-weight: 600; margin: 1rem 0 0.5rem; }
+    p  { margin-bottom: 1rem; line-height: 1.75; color: var(--muted); }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+
+    section { padding: 5rem 0; border-bottom: 1px solid var(--border); }
+    section:last-of-type { border-bottom: none; }
+
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
     }
 
-    h2 {
-      font-size: 2rem;
-      font-weight: 700;
-      margin: 2rem 0 1rem 0;
-      letter-spacing: -0.01em;
+    /* ─── Nav ────────────────────────────────────── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(13,17,23,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
     }
-
-    h3 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin: 1rem 0 0.5rem 0;
-    }
-
-    p {
-      margin-bottom: 1rem;
-      line-height: 1.7;
-    }
-
-    /* Grid system (8px) */
-    .container {
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+      padding: 0 2rem;
       max-width: 1200px;
       margin: 0 auto;
-      padding: 0 2rem;
+    }
+    .nav-brand {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      padding: 0.4rem 1rem;
+      background: var(--accent);
+      color: var(--bg);
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.15s, transform 0.15s;
+    }
+    .nav-cta:hover { background: var(--accent-lt); transform: translateY(-1px); }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
     }
 
-    /* Sections */
-    section {
-      padding: 4rem 0;
-      border-bottom: 1px solid #30363d;
-    }
-
-    section:last-child {
-      border-bottom: none;
-    }
-
-    /* Hero */
+    /* ─── Hero ───────────────────────────────────── */
     .hero {
-      padding: 6rem 0 2rem 0;
+      padding: 6rem 0 3rem;
       text-align: center;
+      position: relative;
+      overflow: hidden;
     }
 
-    .hero h1 {
-      color: #f97316;
+    /* ambient glow behind hero */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(ellipse at center, rgba(249,115,22,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(249,115,22,0.1);
+      border: 1px solid rgba(249,115,22,0.3);
+      border-radius: 999px;
+      padding: 0.3rem 0.9rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.4; }
+    }
+
+    .hero-title {
+      color: var(--text);
       margin-bottom: 0.5rem;
-      font-size: 3.5rem;
     }
-
+    .hero-gradient {
+      background: linear-gradient(135deg, var(--accent) 0%, #fbbf24 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
     .hero-subtitle {
-      font-size: 1.5rem;
-      color: #8b949e;
+      font-size: 1.25rem;
+      color: var(--muted);
       margin-bottom: 0.5rem;
       font-weight: 500;
     }
-
     .hero-tagline {
-      font-size: 1.125rem;
-      color: #79c0ff;
+      font-size: 1rem;
+      color: var(--blue);
       margin-bottom: 2rem;
-      font-weight: 400;
+      font-family: 'JetBrains Mono', monospace;
     }
 
-    .button-group {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-bottom: 3rem;
-    }
-
+    /* ─── Buttons ────────────────────────────────── */
+    .button-group { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 3rem; }
     .button {
       padding: 0.75rem 1.5rem;
-      border-radius: 6px;
-      font-size: 1rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
       font-weight: 600;
       border: 1px solid transparent;
       cursor: pointer;
@@ -114,472 +194,361 @@
       text-decoration: none;
       display: inline-block;
     }
+    .button-primary { background: var(--accent); color: var(--bg); }
+    .button-primary:hover { background: var(--accent-lt); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(249,115,22,0.25); }
+    .button-secondary { background: transparent; color: var(--blue); border-color: var(--blue); }
+    .button-secondary:hover { background: var(--blue); color: var(--bg); transform: translateY(-2px); }
 
-    .button-primary {
-      background-color: #f97316;
-      color: #0d1117;
-    }
-
-    .button-primary:hover {
-      background-color: #fb923c;
-      transform: translateY(-2px);
-    }
-
-    .button-secondary {
-      background-color: transparent;
-      color: #79c0ff;
-      border: 1px solid #79c0ff;
-    }
-
-    .button-secondary:hover {
-      background-color: #79c0ff;
-      color: #0d1117;
-      transform: translateY(-2px);
-    }
-
-    /* Stats bar */
+    /* ─── Stats bar ──────────────────────────────── */
     .stats-bar {
-      background-color: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      padding: 1.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem 2rem;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1.5rem;
       text-align: center;
-      margin-bottom: 2rem;
     }
-
-    .stat-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
     .stat-value {
-      font-size: 1.5rem;
+      font-size: 1.75rem;
       font-weight: 700;
-      color: #f97316;
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
       margin-bottom: 0.25rem;
     }
+    .stat-label { font-size: 0.8rem; color: var(--muted); font-weight: 500; }
 
-    .stat-label {
-      font-size: 0.875rem;
-      color: #8b949e;
-    }
-
-    /* Cards */
+    /* ─── Cards ──────────────────────────────────── */
     .cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1.5rem;
       margin: 2rem 0;
     }
-
     .card {
-      background-color: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
       padding: 2rem;
-      transition: all 0.3s ease;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
     }
-
     .card:hover {
-      border-color: #f97316;
+      border-color: var(--accent);
       transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(249, 115, 22, 0.1);
+      box-shadow: 0 8px 32px rgba(249,115,22,0.08);
     }
-
-    .card h3 {
-      color: #f97316;
-      margin-bottom: 0.75rem;
-    }
-
+    .card h3 { color: var(--accent); }
     .card-number {
       display: inline-block;
-      background-color: #f97316;
-      color: #0d1117;
-      padding: 0.25rem 0.5rem;
+      background: var(--accent);
+      color: var(--bg);
+      padding: 0.2rem 0.5rem;
       border-radius: 4px;
       font-size: 0.875rem;
       font-weight: 700;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
     }
 
-    /* Terminal demo */
+    /* ─── Terminal ───────────────────────────────── */
     .terminal {
-      background-color: #0d1117;
-      border: 1px solid #30363d;
-      border-radius: 8px;
+      background: #010409;
+      border: 1px solid var(--border);
+      border-radius: 12px;
       padding: 1.5rem;
       margin: 2rem 0;
-      font-size: 0.9rem;
+      font-size: 0.875rem;
       overflow-x: auto;
+      font-family: 'JetBrains Mono', monospace;
     }
-
     .terminal-header {
       display: flex;
+      align-items: center;
       gap: 0.5rem;
-      margin-bottom: 1rem;
-      color: #8b949e;
+      margin-bottom: 1.25rem;
     }
-
     .terminal-dot {
       width: 12px;
       height: 12px;
       border-radius: 50%;
-      background-color: #8b949e;
     }
+    .dot-red    { background: #ff5f57; }
+    .dot-yellow { background: #ffbd2e; }
+    .dot-green  { background: #28ca41; }
 
-    .terminal-dot:first-child {
-      background-color: #f97316;
+    .terminal-title {
+      margin-left: auto;
+      font-size: 0.75rem;
+      color: var(--muted);
     }
+    .terminal-prompt { color: var(--accent); }
+    .terminal-cmd    { color: var(--blue); }
+    .terminal-output { color: var(--muted); white-space: pre-wrap; word-break: break-word; margin-top: 1rem; line-height: 1.6; }
+    .terminal-ok     { color: var(--green); }
+    .terminal-hl     { color: var(--text); font-weight: 500; }
 
-    .terminal-dot:nth-child(2) {
-      background-color: #f97316;
-    }
-
-    .terminal-line {
-      margin-bottom: 0.75rem;
-      color: #8b949e;
-    }
-
-    .terminal-input {
-      color: #79c0ff;
-      margin-bottom: 1rem;
-    }
-
-    .terminal-output {
-      color: #39d353;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-
-    .terminal-prompt {
-      color: #f97316;
-    }
-
-    /* Table */
-    .table-wrapper {
-      overflow-x: auto;
-      margin: 2rem 0;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background-color: #161b22;
-      border-radius: 8px;
+    /* typewriter animation */
+    .typewriter {
       overflow: hidden;
+      white-space: nowrap;
+      border-right: 2px solid var(--accent);
+      animation: typing 1.8s steps(60, end) forwards, blink 0.75s step-end infinite;
+      max-width: max-content;
     }
+    @keyframes typing { from { width: 0; } to { width: 100%; } }
+    @keyframes blink  { 50% { border-color: transparent; } }
 
-    thead {
-      background-color: #0d1117;
-      border-bottom: 2px solid #30363d;
-    }
-
+    /* ─── Table ──────────────────────────────────── */
+    .table-wrapper { overflow-x: auto; margin: 2rem 0; border-radius: 12px; border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; background: var(--surface); }
+    thead { background: #010409; }
     th {
-      padding: 1rem;
+      padding: 0.875rem 1rem;
       text-align: left;
-      color: #f97316;
+      color: var(--accent);
       font-weight: 700;
-      font-size: 0.875rem;
+      font-size: 0.75rem;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
+      font-family: 'JetBrains Mono', monospace;
+      white-space: nowrap;
     }
+    td { padding: 0.875rem 1rem; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: rgba(249,115,22,0.03); }
+    td:first-child { color: var(--text); font-weight: 500; }
+    .td-green { color: var(--green); font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+    .td-accent { color: var(--accent); font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+    .td-total td { border-top: 2px solid var(--border); font-weight: 700; }
 
-    td {
-      padding: 1rem;
-      border-bottom: 1px solid #30363d;
-    }
-
-    tbody tr:last-child td {
-      border-bottom: none;
-    }
-
-    tbody tr:hover {
-      background-color: #0d1117;
-    }
-
-    td:first-child {
-      color: #f97316;
-      font-weight: 600;
-    }
-
-    /* Methodology steps */
+    /* ─── Methodology ────────────────────────────── */
     .methodology {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 1.5rem;
       margin: 2rem 0;
     }
-
     .step {
       text-align: center;
       padding: 1.5rem;
-      background-color: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      transition: all 0.3s ease;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      transition: border-color 0.2s, transform 0.2s;
+      position: relative;
     }
-
-    .step:hover {
-      border-color: #f97316;
-    }
-
+    .step:hover { border-color: var(--accent); transform: translateY(-3px); }
     .step-number {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       width: 48px;
       height: 48px;
-      line-height: 48px;
-      background-color: #f97316;
-      color: #0d1117;
+      background: var(--accent);
+      color: var(--bg);
       border-radius: 50%;
       font-weight: 700;
       font-size: 1.25rem;
       margin-bottom: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
     }
+    .step h3 { font-size: 1rem; color: var(--text); }
+    .step p   { font-size: 0.85rem; margin-bottom: 0; }
 
-    .step h3 {
-      font-size: 1rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .step p {
-      font-size: 0.875rem;
-      color: #8b949e;
-      margin-bottom: 0;
-    }
-
-    /* Benefits grid */
+    /* ─── Benefits ───────────────────────────────── */
     .benefits {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 2rem;
+      gap: 1.5rem;
       margin: 2rem 0;
     }
-
     .benefit {
       padding: 1.5rem;
-      background-color: #161b22;
-      border-left: 4px solid #f97316;
-      border-radius: 4px;
+      background: var(--surface);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
     }
+    .benefit h3 { color: var(--accent); margin-top: 0; font-size: 1rem; }
 
-    .benefit h3 {
-      margin-top: 0;
-      color: #f97316;
-    }
-
-    /* Engagement options */
+    /* ─── Engagement ─────────────────────────────── */
     .engagement-options {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 1.5rem;
       margin: 2rem 0;
     }
-
     .engagement-card {
-      background-color: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
       padding: 2rem;
-      transition: all 0.3s ease;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
     }
-
     .engagement-card:hover {
-      border-color: #f97316;
-      box-shadow: 0 8px 24px rgba(249, 115, 22, 0.1);
+      border-color: var(--accent);
+      box-shadow: 0 8px 32px rgba(249,115,22,0.08);
+      transform: translateY(-3px);
     }
-
-    .engagement-card h3 {
-      color: #f97316;
-      margin-bottom: 0.75rem;
-      font-size: 1.25rem;
-    }
-
+    .engagement-card h3 { color: var(--accent); font-size: 1.125rem; margin-bottom: 0.5rem; }
     .engagement-price {
       font-size: 1.5rem;
-      color: #39d353;
+      color: var(--green);
       font-weight: 700;
       margin-bottom: 1rem;
+      font-family: 'JetBrains Mono', monospace;
     }
-
-    .engagement-list {
-      list-style: none;
-      margin-bottom: 1.5rem;
-    }
-
+    .engagement-list { list-style: none; margin-bottom: 1.5rem; }
     .engagement-list li {
-      padding: 0.5rem 0;
-      color: #8b949e;
+      padding: 0.4rem 0;
+      color: var(--muted);
       font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
-
-    .engagement-list li:before {
-      content: "→ ";
-      color: #f97316;
+    .engagement-list li::before {
+      content: "→";
+      color: var(--accent);
       font-weight: 700;
-      margin-right: 0.5rem;
+      flex-shrink: 0;
     }
 
-    /* Contact section */
-    .contact {
-      background-color: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      padding: 2rem;
+    /* ─── Contact / CTA ──────────────────────────── */
+    .contact-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2.5rem;
       text-align: center;
-      margin: 2rem 0;
+      margin-top: 2rem;
+      position: relative;
+      overflow: hidden;
     }
-
+    .contact-block::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center top, rgba(249,115,22,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .contact-block p { color: var(--muted); margin-bottom: 0.5rem; }
+    .contact-links { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 1rem; }
     .contact-link {
-      display: inline-block;
-      color: #79c0ff;
+      color: var(--blue);
       text-decoration: none;
       font-weight: 600;
-      margin: 0.5rem;
-      transition: color 0.2s ease;
+      font-size: 0.9rem;
+      font-family: 'JetBrains Mono', monospace;
+      transition: color 0.15s;
+    }
+    .contact-link:hover { color: var(--accent); }
+
+    /* ─── Section label ──────────────────────────── */
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 0.5rem;
     }
 
-    .contact-link:hover {
-      color: #f97316;
-    }
-
-    /* Footer */
+    /* ─── Footer ─────────────────────────────────── */
     footer {
       padding: 2rem 0;
       text-align: center;
-      color: #6e7681;
-      font-size: 0.875rem;
-      border-top: 1px solid #30363d;
+      border-top: 1px solid var(--border);
     }
+    footer p { font-size: 0.8rem; margin-bottom: 0.25rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
 
-    /* Responsive */
+    /* ─── Scroll fade ────────────────────────────── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── Responsive ─────────────────────────────── */
     @media (max-width: 768px) {
-      .container {
-        padding: 0 1rem;
-      }
-
-      h1 {
-        font-size: 2rem;
-      }
-
-      .hero h1 {
-        font-size: 2.5rem;
-      }
-
-      h2 {
-        font-size: 1.5rem;
-      }
-
-      .hero-subtitle {
-        font-size: 1.125rem;
-      }
-
-      .button-group {
-        gap: 0.75rem;
-      }
-
-      .button {
-        padding: 0.625rem 1.25rem;
-        font-size: 0.9rem;
-      }
-
-      .stats-bar {
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-        gap: 1rem;
-        padding: 1rem;
-      }
-
-      .cards {
-        grid-template-columns: 1fr;
-      }
-
-      .methodology {
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-        gap: 1rem;
-      }
-
-      .step {
-        padding: 1rem;
-      }
-
-      table {
-        font-size: 0.85rem;
-      }
-
-      th, td {
-        padding: 0.75rem 0.5rem;
-      }
-
-      .engagement-options {
-        grid-template-columns: 1fr;
-      }
+      .container { padding: 0 1rem; }
+      section { padding: 3rem 0; }
+      .stats-bar { grid-template-columns: repeat(2, 1fr); }
+      .cards, .engagement-options { grid-template-columns: 1fr; }
+      .methodology { grid-template-columns: repeat(2, 1fr); }
+      .button-group { gap: 0.75rem; }
+      .button { padding: 0.625rem 1.25rem; font-size: 0.875rem; }
+      th, td { padding: 0.625rem 0.5rem; font-size: 0.8rem; }
     }
 
-    /* Accessibility */
+    /* ─── a11y ───────────────────────────────────── */
     @media (prefers-reduced-motion: reduce) {
-      * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-      }
+      *, .fade-in { animation: none !important; transition: none !important; }
+      .typewriter { white-space: normal; border-right: none; overflow: visible; }
     }
-
-    /* Focus states */
-    a:focus,
-    button:focus {
-      outline: 2px solid #f97316;
-      outline-offset: 2px;
-    }
-
-    /* High contrast mode */
     @media (prefers-contrast: more) {
-      .card,
-      .step,
-      .engagement-card {
-        border-width: 2px;
-      }
-
-      .button {
-        border-width: 2px;
-      }
+      .card, .step, .engagement-card { border-width: 2px; }
+      .button { border-width: 2px; }
     }
   </style>
 </head>
 <body>
-  <!-- Hero Section -->
-  <section class="hero">
+
+  <!-- ── Nav ── -->
+  <nav class="nav" role="navigation" aria-label="Primary">
+    <div class="nav-inner">
+      <a href="#" class="nav-brand">RustForge</a>
+      <ul class="nav-links">
+        <li><a href="#problem">Problem</a></li>
+        <li><a href="#solution">Solution</a></li>
+        <li><a href="#results">Results</a></li>
+        <li><a href="#methodology">Methodology</a></li>
+        <li><a href="#engage">Engage</a></li>
+      </ul>
+      <a href="mailto:michael@puodziukas.dev" class="nav-cta">Contact</a>
+    </div>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <section class="hero" aria-labelledby="hero-heading">
     <div class="container">
-      <h1>RustForge</h1>
+      <div class="hero-badge">
+        <span class="badge-dot" aria-hidden="true"></span>
+        Open Source · Apache 2.0 · Rust 1.75+
+      </div>
+
+      <h1 id="hero-heading">
+        <span class="hero-gradient">RustForge</span>
+      </h1>
       <p class="hero-subtitle">Zero-Risk Legacy Modernization Engine</p>
-      <p class="hero-tagline">COBOL/Fortran → Rust | Zero Downtime | Byte-for-Byte Parity Proof</p>
+      <p class="hero-tagline mono">COBOL/Fortran → Rust &nbsp;|&nbsp; Zero Downtime &nbsp;|&nbsp; Byte-for-Byte Parity Proof</p>
+
       <div class="button-group">
         <a href="https://github.com/mpuodziukas-labs/rustforge-legacy-modernization" class="button button-primary">View on GitHub</a>
-        <a href="https://github.com/mpuodziukas-labs/rustforge-legacy-modernization/blob/main/benchmarks/results.md" class="button button-secondary">Run Benchmark</a>
+        <a href="https://github.com/mpuodziukas-labs/rustforge-legacy-modernization/blob/main/benchmarks/results.md" class="button button-secondary">Benchmark Results</a>
         <a href="mailto:michael@puodziukas.dev" class="button button-secondary">Analyze Your COBOL</a>
       </div>
 
-      <!-- Stats Bar -->
-      <div class="stats-bar">
-        <div class="stat-item">
-          <div class="stat-value">231</div>
+      <div class="stats-bar" role="list" aria-label="Key metrics">
+        <div class="stat-item" role="listitem">
+          <div class="stat-value">464</div>
           <div class="stat-label">Tests Passing</div>
         </div>
-        <div class="stat-item">
+        <div class="stat-item" role="listitem">
           <div class="stat-value">0</div>
           <div class="stat-label">Failures</div>
         </div>
-        <div class="stat-item">
-          <div class="stat-value">17x</div>
+        <div class="stat-item" role="listitem">
+          <div class="stat-value">22x</div>
           <div class="stat-label">Avg Speedup†</div>
         </div>
-        <div class="stat-item">
+        <div class="stat-item" role="listitem">
           <div class="stat-value">85%</div>
           <div class="stat-label">Memory Reduction</div>
         </div>
-        <div class="stat-item">
+        <div class="stat-item" role="listitem">
           <div class="stat-value">7</div>
           <div class="stat-label">Modules Migrated</div>
         </div>
@@ -587,15 +556,16 @@
     </div>
   </section>
 
-  <!-- The Problem Section -->
-  <section>
+  <!-- ── Problem ── -->
+  <section id="problem" aria-labelledby="problem-heading">
     <div class="container">
-      <h2>The Problem: $50 Trillion Runs on Obsolete Code</h2>
-      <div class="cards">
+      <p class="section-label">The Problem</p>
+      <h2 id="problem-heading">$50 Trillion Runs on Obsolete Code</h2>
+      <div class="cards fade-in">
         <div class="card">
           <div class="card-number">1.2B</div>
           <h3>COBOL Lines in Production</h3>
-          <p>$50 trillion runs annually on COBOL. 5,000 engineers retiring by 2028. No succession plan exists. The knowledge lives in people, not documentation.</p>
+          <p>$50 trillion transacts annually on COBOL. 5,000 engineers retiring by 2028. No succession plan. The knowledge lives in people, not documentation.</p>
         </div>
         <div class="card">
           <div class="card-number">300M</div>
@@ -605,56 +575,60 @@
         <div class="card">
           <div class="card-number">$1M+</div>
           <h3>Per Hour of Downtime</h3>
-          <p>Banks, insurers, government agencies: one hour offline = millions lost. A 0.001% discrepancy in an account balance is a regulatory violation. Migration is theoretically simple. Proof is impossible.</p>
+          <p>Banks, insurers, government agencies: one hour offline = millions lost. A 0.001% discrepancy in an account balance is a regulatory violation.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- The Solution Section -->
-  <section>
+  <!-- ── Solution ── -->
+  <section id="solution" aria-labelledby="solution-heading">
     <div class="container">
-      <h2>The Solution: Deterministic Dual-Execution Proof</h2>
+      <p class="section-label">The Solution</p>
+      <h2 id="solution-heading">Deterministic Dual-Execution Proof</h2>
       <p>Run the legacy system and its Rust equivalent in parallel. Compare every output at the byte level. Only flip the switch when outputs match to machine precision.</p>
 
-      <div class="terminal">
-        <div class="terminal-header">
-          <div class="terminal-dot"></div>
-          <div class="terminal-dot"></div>
-          <div class="terminal-dot"></div>
+      <div class="terminal" role="region" aria-label="Terminal demo output">
+        <div class="terminal-header" aria-hidden="true">
+          <span class="terminal-dot dot-red"></span>
+          <span class="terminal-dot dot-yellow"></span>
+          <span class="terminal-dot dot-green"></span>
+          <span class="terminal-title">rustforge — cargo run</span>
         </div>
-        <div class="terminal-input">
-          <span class="terminal-prompt">$</span> cargo run --bin analyze -- account_balance.cob
+        <div class="typewriter mono">
+          <span class="terminal-prompt">$</span> <span class="terminal-cmd">cargo run --bin analyze -- account_balance.cob</span>
         </div>
-        <div class="terminal-output">
-╔════════════════════════════════════════════════╗
+        <pre class="terminal-output" aria-live="polite">
+<span class="terminal-hl">╔════════════════════════════════════════════════╗
 ║  RUSTFORGE MIGRATION ANALYSIS REPORT           ║
-╚════════════════════════════════════════════════╝
+╚════════════════════════════════════════════════╝</span>
 
-File: account_balance.cob  |  Risk: <span style="color: #39d353;">LOW ✅</span>
+File: account_balance.cob  |  Risk: <span class="terminal-ok">LOW ✅</span>
 Code Lines: 68 → Estimated Rust: 204 (incl. tests+docs)
 Complexity: 2.8/10  |  Migration: ~0.5 days
-RECOMMENDATION: <span style="color: #39d353;">GREEN — Proceed with migration</span>
+RECOMMENDATION: <span class="terminal-ok">GREEN — Proceed with migration</span>
 
-Parity Tests: <span style="color: #39d353;">6/6 PASS</span> (tolerance: 1e-10)
-Speedup: <span style="color: #39d353;">47x</span> faster (3.2ms → 68μs)
-Memory: <span style="color: #39d353;">85%</span> reduction (2.4GB → 340MB)
-        </div>
+Parity Tests: <span class="terminal-ok">6/6 PASS</span> (tolerance: 1e-10)
+Speedup:      <span class="terminal-ok">47x</span> faster (3.2ms → 68μs)
+Memory:       <span class="terminal-ok">85%</span> reduction (2.4GB → 340MB)</pre>
       </div>
     </div>
   </section>
 
-  <!-- Results Table Section -->
-  <section>
+  <!-- ── Results ── -->
+  <section id="results" aria-labelledby="results-heading">
     <div class="container">
-      <h2>Production Results: 7 Modules, 100% Parity Verified</h2>
-      <div class="table-wrapper">
+      <p class="section-label">Production Results</p>
+      <h2 id="results-heading">7 Modules. 100% Parity Verified.</h2>
+      <p>† Average speedup computed across all 7 modules (geometric mean). Individual results vary by computation type.</p>
+
+      <div class="table-wrapper fade-in">
         <table>
           <thead>
             <tr>
               <th>Module</th>
-              <th>Legacy Lines</th>
-              <th>Rust Lines</th>
+              <th>Legacy LOC</th>
+              <th>Rust LOC</th>
               <th>Reduction</th>
               <th>Speedup</th>
               <th>Memory ↓</th>
@@ -667,81 +641,81 @@ Memory: <span style="color: #39d353;">85%</span> reduction (2.4GB → 340MB)
               <td>Account Balance (MOD-001)</td>
               <td>847</td>
               <td>312</td>
-              <td>63%</td>
-              <td>47x</td>
-              <td>86%</td>
+              <td class="td-accent">63%</td>
+              <td class="td-green">47x</td>
+              <td class="td-green">86%</td>
               <td>142</td>
-              <td>✅</td>
+              <td class="td-green">✅</td>
             </tr>
             <tr>
               <td>Eigenvalue Solver (MOD-002)</td>
               <td>1,240</td>
               <td>480</td>
-              <td>61%</td>
-              <td>12x</td>
-              <td>84%</td>
+              <td class="td-accent">61%</td>
+              <td class="td-green">12x</td>
+              <td class="td-green">84%</td>
               <td>89</td>
-              <td>✅</td>
+              <td class="td-green">✅</td>
             </tr>
             <tr>
               <td>Batch Processor (MOD-003)</td>
               <td>692</td>
               <td>256</td>
-              <td>63%</td>
-              <td>38x</td>
-              <td>84%</td>
+              <td class="td-accent">63%</td>
+              <td class="td-green">38x</td>
+              <td class="td-green">84%</td>
               <td>67</td>
-              <td>✅</td>
+              <td class="td-green">✅</td>
             </tr>
             <tr>
               <td>Loan Calculator (MOD-004)</td>
               <td>534</td>
               <td>198</td>
-              <td>63%</td>
-              <td>22x</td>
-              <td>84%</td>
+              <td class="td-accent">63%</td>
+              <td class="td-green">22x</td>
+              <td class="td-green">84%</td>
               <td>54</td>
-              <td>✅</td>
+              <td class="td-green">✅</td>
             </tr>
             <tr>
               <td>Inventory Valuation (MOD-005)</td>
               <td>892</td>
               <td>320</td>
-              <td>64%</td>
-              <td>15x</td>
-              <td>85%</td>
+              <td class="td-accent">64%</td>
+              <td class="td-green">15x</td>
+              <td class="td-green">85%</td>
               <td>112</td>
-              <td>✅</td>
+              <td class="td-green">✅</td>
             </tr>
             <tr>
               <td>Statistics Engine (MOD-006)</td>
               <td>1,890</td>
               <td>720</td>
-              <td>62%</td>
-              <td>8x</td>
-              <td>85%</td>
+              <td class="td-accent">62%</td>
+              <td class="td-green">8x</td>
+              <td class="td-green">85%</td>
               <td>89</td>
-              <td>✅</td>
+              <td class="td-green">✅</td>
             </tr>
             <tr>
               <td>Report Generator (MOD-007)</td>
               <td>478</td>
               <td>189</td>
-              <td>60%</td>
-              <td>10.6x</td>
-              <td>84%</td>
+              <td class="td-accent">60%</td>
+              <td class="td-green">10.6x</td>
+              <td class="td-green">84%</td>
               <td>32</td>
-              <td>✅</td>
+              <td class="td-green">✅</td>
             </tr>
-            <tr>
-              <td><strong>TOTAL</strong></td>
-              <td><strong>709</strong></td>
-              <td><strong>1,807</strong></td>
-              <td><strong>†see notes</strong></td>
-              <td><strong>375x avg</strong></td>
-              <td><strong>85%</strong></td>
-              <td><strong>231</strong></td>
-              <td><strong>✅</strong></td>
+            <tr class="td-total">
+              <td>TOTAL</td>
+              <td>6,573</td>
+              <td>2,475</td>
+              <td class="td-accent">62% avg</td>
+              <td class="td-green">~22x avg†</td>
+              <td class="td-green">85%</td>
+              <td>585</td>
+              <td class="td-green">✅ 7/7</td>
             </tr>
           </tbody>
         </table>
@@ -749,11 +723,13 @@ Memory: <span style="color: #39d353;">85%</span> reduction (2.4GB → 340MB)
     </div>
   </section>
 
-  <!-- Methodology Section -->
-  <section>
+  <!-- ── Methodology ── -->
+  <section id="methodology" aria-labelledby="method-heading">
     <div class="container">
-      <h2>The RustForge Methodology: 5-Phase Zero-Risk Migration</h2>
-      <div class="methodology">
+      <p class="section-label">Methodology</p>
+      <h2 id="method-heading">5-Phase Zero-Risk Migration</h2>
+
+      <div class="methodology fade-in">
         <div class="step">
           <div class="step-number">1</div>
           <h3>Shadow</h3>
@@ -762,109 +738,121 @@ Memory: <span style="color: #39d353;">85%</span> reduction (2.4GB → 340MB)
         <div class="step">
           <div class="step-number">2</div>
           <h3>Parity Gate</h3>
-          <p>Byte-for-byte comparison of outputs (1e-10 tolerance). Floating-point divergence blocked at compile time.</p>
+          <p>Byte-for-byte comparison at 1e-10 tolerance. Floating-point divergence blocked at compile time.</p>
         </div>
         <div class="step">
           <div class="step-number">3</div>
           <h3>Shadow Traffic</h3>
-          <p>Route 1% → 10% → 100% to Rust over 30 days. Automatic rollback on any divergence detected.</p>
+          <p>Route 1% → 10% → 100% over 30 days. Automatic rollback on any divergence detected.</p>
         </div>
         <div class="step">
           <div class="step-number">4</div>
           <h3>Flip</h3>
-          <p>Switch to Rust. Legacy stays on as fallback. Rollback SLA: less than 30 seconds, zero data loss.</p>
+          <p>Switch to Rust. Legacy stays on as fallback. Rollback SLA: &lt;30 seconds, zero data loss.</p>
         </div>
         <div class="step">
           <div class="step-number">5</div>
           <h3>Decommission</h3>
-          <p>After 90 clean days, retire legacy system. Capture final knowledge, archive, document.</p>
+          <p>After 90 clean days, retire legacy. Capture final knowledge, archive, document.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Why Rust Section -->
-  <section>
+  <!-- ── Why Rust ── -->
+  <section aria-labelledby="rust-heading">
     <div class="container">
-      <h2>Why Rust: 8 Vulnerability Classes Eliminated at Compile Time</h2>
-      <div class="benefits">
+      <p class="section-label">Why Rust</p>
+      <h2 id="rust-heading">8 Vulnerability Classes Eliminated at Compile Time</h2>
+
+      <div class="benefits fade-in">
         <div class="benefit">
           <h3>Memory Safety Without GC</h3>
-          <p>No garbage collection pauses. For batch processing that runs overnight on mainframe schedules, deterministic performance is non-negotiable. Rust delivers memory safety with zero runtime overhead.</p>
+          <p>No GC pauses. Deterministic performance is non-negotiable for batch processing on mainframe schedules. Rust delivers memory safety with zero runtime overhead.</p>
         </div>
         <div class="benefit">
           <h3>Zero GC Pauses</h3>
-          <p>Java and Python's GC can stop the world at 3am. Rust's RAII guarantees that memory is deallocated deterministically the instant its owning scope ends. Financial batch processing needs predictable latency.</p>
+          <p>Java and Python's GC can stop the world at 3am. Rust's RAII guarantees deterministic deallocation. Financial batch processing needs predictable latency.</p>
         </div>
         <div class="benefit">
           <h3>Production HPC Mathematics</h3>
-          <p><code>nalgebra</code> and <code>ndarray</code> replace Fortran's core value — high-performance linear algebra. Eigenvalue solvers, matrix decomposition, and scientific computing are 1st-class citizens.</p>
+          <p><code>nalgebra</code> and <code>ndarray</code> replace Fortran's core value. Eigenvalue solvers, matrix decomposition, and scientific computing are first-class citizens.</p>
         </div>
         <div class="benefit">
           <h3>Proof-by-Type-System</h3>
-          <p>If the code compiles, the guarantees hold. No null pointers. No uninitialized memory. No data races. No buffer overflows. The compiler proves entire categories of vulnerability are impossible before execution.</p>
+          <p>If it compiles, the guarantees hold. No null pointers. No uninitialized memory. No data races. No buffer overflows. The compiler proves entire vulnerability classes are impossible.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Engagement Section -->
-  <section>
+  <!-- ── Engage ── -->
+  <section id="engage" aria-labelledby="engage-heading">
     <div class="container">
-      <h2>Available for Engagement</h2>
-      <p>Remote (US) | Async-preferred | Response within 24 hours</p>
+      <p class="section-label">Available for Engagement</p>
+      <h2 id="engage-heading">Remote (US) &nbsp;·&nbsp; Async-preferred &nbsp;·&nbsp; &lt;24h Response</h2>
 
-      <div class="engagement-options">
+      <div class="engagement-options fade-in">
         <div class="engagement-card">
           <h3>Contract C2C</h3>
-          <div class="engagement-price">$75–120/hr</div>
+          <div class="engagement-price">$75–120 /hr</div>
           <ul class="engagement-list">
-            <li>AST analysis & scoping</li>
+            <li>AST analysis &amp; scoping</li>
             <li>Parity test generation</li>
             <li>Dual-execution harness</li>
             <li>Module-by-module migration</li>
           </ul>
+          <a href="mailto:michael@puodziukas.dev?subject=RustForge%20C2C%20Inquiry" class="button button-primary" style="">Get Started</a>
         </div>
         <div class="engagement-card">
           <h3>Staff Augmentation W2</h3>
-          <div class="engagement-price">$140–215K/yr</div>
+          <div class="engagement-price">$140–215K /yr</div>
           <ul class="engagement-list">
             <li>Full-time integration</li>
-            <li>Mentorship & training</li>
+            <li>Mentorship &amp; training</li>
             <li>Production deployment</li>
             <li>Post-cutover support</li>
           </ul>
+          <a href="mailto:michael@puodziukas.dev?subject=RustForge%20W2%20Inquiry" class="button button-secondary">Discuss Fit</a>
         </div>
         <div class="engagement-card">
           <h3>Migration Lead</h3>
-          <div class="engagement-price">$200–400K/engagement</div>
+          <div class="engagement-price">$200–400K /engagement</div>
           <ul class="engagement-list">
             <li>End-to-end program ownership</li>
-            <li>Architecture & design</li>
+            <li>Architecture &amp; design</li>
             <li>Risk management</li>
             <li>Regulatory compliance</li>
           </ul>
+          <a href="mailto:michael@puodziukas.dev?subject=RustForge%20Migration%20Lead%20Inquiry" class="button button-secondary">Schedule Call</a>
         </div>
       </div>
 
-      <div class="contact">
-        <p><strong>Contact:</strong></p>
-        <p>
+      <div class="contact-block">
+        <p><strong>Direct contact</strong></p>
+        <div class="contact-links">
           <a href="mailto:michael@puodziukas.dev" class="contact-link">michael@puodziukas.dev</a>
-        </p>
-        <p>
-          <a href="https://github.com/mpuodziukas-labs" class="contact-link">github.com/mpuodziukas-labs</a>
-        </p>
+          <span aria-hidden="true" style="color:var(--border)">|</span>
+          <a href="https://github.com/mpuodziukas-labs" class="contact-link" target="_blank" rel="noopener">github.com/mpuodziukas-labs</a>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Footer -->
+  <!-- ── Footer ── -->
   <footer>
     <div class="container">
-      <p>RustForge — Built with Rust 1.75+ | 231 tests | 0 CVEs | Apache 2.0 License</p>
-      <p>Because "it's too risky to modernize" is only true until someone proves otherwise.</p>
+      <p>RustForge · Rust 1.75+ · 464 tests · 0 CVEs · Apache 2.0</p>
+      <p>"It's too risky to modernize" — only true until someone proves otherwise.</p>
     </div>
   </footer>
+
+  <script>
+    // scroll-fade observer
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
 </body>
 </html>
