@@ -46,11 +46,10 @@ impl MigrationReport {
 
         let division_count = self.divisions.len();
         let paragraph_count = self.paragraphs.len();
-        let reduction_pct = if self.code_lines > 0 {
-            100 - (self.estimated_rust_lines * 100 / self.code_lines)
-        } else {
-            0
-        };
+        let reduction_pct = (self.estimated_rust_lines * 100)
+            .checked_div(self.code_lines)
+            .map(|v| 100usize.saturating_sub(v))
+            .unwrap_or(0);
 
         // Build vulnerability lines
         let mut vuln_lines = String::new();
