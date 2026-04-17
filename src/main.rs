@@ -1,24 +1,16 @@
-#![allow(dead_code)]
 mod account_balance;
 mod batch_processor;
-mod cobol_analyzer;
 mod eigenvalue_solver;
-mod inventory_valuation;
-mod loan_calculator;
 mod matrix_operations;
 mod parity;
 mod report_generator;
-mod statistics;
 
 use account_balance::{display_report, process_account};
 use batch_processor::{BatchSummary, Transaction};
 use eigenvalue_solver::PowerIterationSolver;
-use inventory_valuation::{display_report as inv_display_report, InventoryLedger};
-use loan_calculator::{calculate_loan, display_amortization, LoanParams};
 use matrix_operations::MatrixOps;
-use parity::parity::{assert_parity_f64, print_parity_result};
+use parity::{assert_parity_f64, print_parity_result};
 use report_generator::generate_sample_report;
-use statistics::{compute_stats, display_report as stats_display_report};
 
 fn main() {
     println!("================================================");
@@ -34,12 +26,6 @@ fn main() {
     demo_eigenvalue_solver();
     println!();
     demo_matrix_operations();
-    println!();
-    demo_loan_calculator();
-    println!();
-    demo_inventory_valuation();
-    println!();
-    demo_statistics();
 }
 
 fn demo_account_balance() {
@@ -214,73 +200,4 @@ fn demo_matrix_operations() {
     println!("\n================================================");
     println!("ALL MODULES COMPLETE");
     println!("================================================");
-}
-
-fn demo_loan_calculator() {
-    println!("--- MODULE 3: LOAN CALCULATOR (MOD-003) ---\n");
-
-    let params = LoanParams {
-        principal: 300_000.0,
-        annual_rate_pct: 6.0,
-        term_months: 360,
-    };
-    let result = calculate_loan(&params);
-    display_amortization(&result);
-
-    // Parity check: Rust payment matches COBOL formula
-    let monthly_rate = 6.0_f64 / 12.0 / 100.0;
-    let cobol_payment = 300_000.0 * monthly_rate
-        / (1.0 - (1.0 + monthly_rate).powi(-360));
-
-    let passed = assert_parity_f64(cobol_payment, result.monthly_payment, 1e-10);
-    print_parity_result(
-        "Monthly Payment Parity (COBOL formula)",
-        cobol_payment,
-        result.monthly_payment,
-        1e-10,
-        passed,
-    );
-}
-
-fn demo_inventory_valuation() {
-    println!("--- MODULE 4: INVENTORY VALUATION / FIFO (MOD-004) ---\n");
-
-    let mut ledger = InventoryLedger::new("WIDGET-A");
-    ledger.purchase(100, 10.00);
-    ledger.purchase(200, 12.50);
-    ledger.purchase(150, 15.00);
-
-    let cogs = ledger.sell(250);
-    println!("Sale of 250 units — COGS: ${:.2}", cogs);
-
-    inv_display_report(&ledger);
-
-    // Parity: COBOL FIFO-SELL result
-    let cobol_cogs = 100.0 * 10.00 + 150.0 * 12.50;
-    let passed = assert_parity_f64(cobol_cogs, cogs, 1e-10);
-    print_parity_result("FIFO COGS Parity (COBOL formula)", cobol_cogs, cogs, 1e-10, passed);
-}
-
-fn demo_statistics() {
-    println!("--- MODULE 5: STATISTICS REPORT GENERATOR (MOD-005) ---\n");
-
-    // Fortran canonical test vector
-    let data = vec![2.0, 4.0, 4.0, 4.0, 5.0, 5.0, 7.0];
-    let stats = compute_stats(&data).unwrap();
-    stats_display_report(&stats);
-
-    // Parity: replicate Fortran formula
-    let n = data.len();
-    let fortran_mean: f64 = data.iter().sum::<f64>() / n as f64;
-    let sum_sq: f64 = data.iter().map(|&x| (x - fortran_mean).powi(2)).sum();
-    let fortran_var = sum_sq / (n - 1) as f64;
-
-    let passed = assert_parity_f64(fortran_var, stats.variance, 1e-10);
-    print_parity_result(
-        "Variance Parity (Fortran formula)",
-        fortran_var,
-        stats.variance,
-        1e-10,
-        passed,
-    );
 }

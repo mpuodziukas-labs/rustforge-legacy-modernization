@@ -87,17 +87,15 @@ impl Report {
 
 impl fmt::Display for Report {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.format_header())?;
-        write!(f, "\n{}", self.format_separator())?;
-        write!(f, "\n{}", self.format_column_headers())?;
-        write!(f, "\n{}", self.format_separator())?;
-        writeln!(f)?;
+        writeln!(f, "{}", self.format_header())?;
+        writeln!(f, "{}", self.format_separator())?;
+        writeln!(f, "{}", self.format_column_headers())?;
+        writeln!(f, "{}", self.format_separator())?;
         for transaction in &self.transactions {
             writeln!(f, "{}", transaction.format())?;
         }
-        write!(f, "{}", self.format_separator())?;
-        write!(f, "\n{}", self.format_footer())?;
-        writeln!(f)
+        writeln!(f, "{}", self.format_separator())?;
+        writeln!(f, "{}", self.format_footer())
     }
 }
 

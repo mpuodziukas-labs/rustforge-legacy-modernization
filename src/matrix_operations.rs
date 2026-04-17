@@ -56,7 +56,7 @@ impl MatrixOps {
         }
 
         // Set diagonal of L to 1
-        for (i, row) in l.iter_mut().enumerate().take(n) {
+        for (i, row) in l.iter_mut().enumerate() {
             row[i] = 1.0;
         }
 
@@ -89,9 +89,9 @@ impl MatrixOps {
             for i in k + 1..n {
                 if a[k][k].abs() > 1e-15 {
                     let factor = a[i][k] / a[k][k];
-                    let pivot_row_copy: Vec<f64> = a[k][k..n].to_vec();
-                    for (j, &pivot_val) in pivot_row_copy.iter().enumerate() {
-                        a[i][k + j] -= factor * pivot_val;
+                    let row_k: Vec<f64> = a[k][k..n].to_vec();
+                    for (col, &ak_j) in row_k.iter().enumerate() {
+                        a[i][k + col] -= factor * ak_j;
                     }
                     b[i] -= factor * b[k];
                 }

@@ -9,7 +9,7 @@ mod parity_tests {
     use rustforge::batch_processor::{BatchSummary, Transaction};
     use rustforge::eigenvalue_solver::PowerIterationSolver;
     use rustforge::matrix_operations::MatrixOps;
-    use rustforge::parity::parity::{assert_parity_f64, assert_parity_vec};
+    use rustforge::parity::{assert_parity_f64, assert_parity_vec};
 
     // MOD-001: Account Balance Parity Tests
 

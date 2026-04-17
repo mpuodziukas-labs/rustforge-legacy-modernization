@@ -32,12 +32,7 @@ pub struct BatchSummary {
 
 impl BatchSummary {
     pub fn new() -> Self {
-        BatchSummary {
-            total_debits: 0.0,
-            total_credits: 0.0,
-            transaction_count: 0,
-            net_change: 0.0,
-        }
+        Self::default()
     }
 
     pub fn add_transaction(&mut self, transaction: &Transaction) {

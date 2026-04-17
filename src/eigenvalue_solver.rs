@@ -8,18 +8,6 @@ pub struct PowerIterationSolver {
 }
 
 impl PowerIterationSolver {
-    /// Creates a new solver with the specified iteration limit and convergence tolerance.
-    ///
-    /// # Arguments
-    /// * `max_iterations` - Maximum number of power-iteration steps before giving up
-    /// * `tolerance`      - Convergence threshold: iteration stops when the change in
-    ///   the Rayleigh-quotient eigenvalue estimate falls below this value
-    ///
-    /// # Example
-    /// ```
-    /// use rustforge::eigenvalue_solver::PowerIterationSolver;
-    /// let solver = PowerIterationSolver::new(100, 1e-10);
-    /// ```
     pub fn new(max_iterations: usize, tolerance: f64) -> Self {
         PowerIterationSolver {
             max_iterations,
@@ -27,18 +15,7 @@ impl PowerIterationSolver {
         }
     }
 
-    /// Returns the canonical 5×5 symmetric positive-definite test matrix used
-    /// throughout the benchmark and test suite.
-    ///
-    /// The matrix has a known dominant eigenvalue of approximately 5.6, which makes
-    /// it a convenient, reproducible fixture for validating convergence.  For `n < 5`
-    /// the function returns an `n×n` zero matrix.
-    ///
-    /// # Arguments
-    /// * `n` - Desired matrix dimension; the hardcoded values are only applied when `n >= 5`
-    ///
-    /// # Returns
-    /// An `n×n` matrix represented as `Vec<Vec<f64>>`.
+    /// Initialize test matrix (symmetric, positive definite)
     pub fn initialize_matrix(n: usize) -> Vec<Vec<f64>> {
         let mut matrix = vec![vec![0.0; n]; n];
 
@@ -60,14 +37,7 @@ impl PowerIterationSolver {
         matrix
     }
 
-    /// Computes the matrix-vector product `y = A × x`.
-    ///
-    /// # Arguments
-    /// * `matrix` - An `n×n` matrix represented as `Vec<Vec<f64>>`
-    /// * `x`      - Input vector of length `n`
-    ///
-    /// # Returns
-    /// Output vector `y` of length `n` where `y[i] = Σ_j matrix[i][j] * x[j]`.
+    /// Matrix-vector multiplication
     pub fn matvec(&self, matrix: &[Vec<f64>], x: &[f64]) -> Vec<f64> {
         let n = matrix.len();
         let mut y = vec![0.0; n];
@@ -81,20 +51,7 @@ impl PowerIterationSolver {
         y
     }
 
-    /// Computes the Euclidean (L2) norm of a vector: `‖v‖ = √(Σ vᵢ²)`.
-    ///
-    /// # Arguments
-    /// * `v` - Input vector of any length
-    ///
-    /// # Returns
-    /// Non-negative scalar ≥ 0.
-    ///
-    /// # Example
-    /// ```
-    /// use rustforge::eigenvalue_solver::PowerIterationSolver;
-    /// let solver = PowerIterationSolver::new(1, 1e-10);
-    /// assert!((solver.norm(&[3.0, 4.0]) - 5.0).abs() < 1e-10);
-    /// ```
+    /// Compute Euclidean norm
     pub fn norm(&self, v: &[f64]) -> f64 {
         v.iter().map(|x| x * x).sum::<f64>().sqrt()
     }
@@ -107,24 +64,7 @@ impl PowerIterationSolver {
             .sum()
     }
 
-    /// Finds the dominant eigenvalue and its eigenvector using the power iteration method.
-    ///
-    /// ## Algorithm
-    /// 1. Start with a uniform unit vector `v₀`.
-    /// 2. Repeatedly compute `v_{k+1} = A × vₖ` and normalise to unit length.
-    /// 3. Estimate the eigenvalue via the Rayleigh quotient: `λ = vᵀ A v`.
-    /// 4. Stop when `|λₖ − λₖ₋₁| < tolerance` or `max_iterations` is reached.
-    ///
-    /// Power iteration converges to the *dominant* (largest-magnitude) eigenvalue.
-    /// The convergence rate depends on the ratio `|λ₁/λ₂|`; a larger ratio means
-    /// faster convergence.
-    ///
-    /// # Arguments
-    /// * `matrix` - Square `n×n` matrix as `&[Vec<f64>]`
-    ///
-    /// # Returns
-    /// `(eigenvalue, eigenvector)` — the dominant eigenvalue and its corresponding
-    /// unit eigenvector.
+    /// Power iteration algorithm
     pub fn solve(&self, matrix: &[Vec<f64>]) -> (f64, Vec<f64>) {
         let n = matrix.len();
 
@@ -160,11 +100,6 @@ impl PowerIterationSolver {
         (lambda, v)
     }
 
-    /// Prints the dominant eigenvalue and eigenvector components to stdout.
-    ///
-    /// # Arguments
-    /// * `eigenvalue`  - The dominant eigenvalue returned by [`solve`](Self::solve)
-    /// * `eigenvector` - The corresponding unit eigenvector
     pub fn print_results(&self, eigenvalue: f64, eigenvector: &[f64]) {
         println!("=====================================");
         println!("EIGENVALUE SOLVER RESULTS");
