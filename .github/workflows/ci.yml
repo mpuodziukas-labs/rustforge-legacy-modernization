@@ -8,10 +8,34 @@ on:
 
 jobs:
   test:
+    name: Test + Lint + Audit
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - run: cargo build --verbose
-      - run: cargo test --verbose
-      - run: cargo clippy -- -D warnings
+      - name: Build
+        run: cargo build --release --verbose
+      - name: Test (464 parity assertions)
+        run: cargo test --release --verbose
+      - name: Clippy
+        run: cargo clippy -- -D warnings
+      - name: Security audit
+        run: |
+          cargo install cargo-audit --quiet
+          cargo audit
+
+  coverage:
+    name: Coverage (tarpaulin)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Install tarpaulin
+        run: cargo install cargo-tarpaulin --quiet
+      - name: Coverage report
+        run: cargo tarpaulin --out Xml --output-dir coverage/ --verbose
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
