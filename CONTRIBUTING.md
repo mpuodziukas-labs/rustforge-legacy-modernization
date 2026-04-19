@@ -14,7 +14,7 @@ RustForge is an open-source library for migrating legacy COBOL and Fortran syste
 ### Setup
 
 ```bash
-git clone https://github.com/yourusername/rustforge.git
+git clone https://github.com/mpuodziukas-labs/rustforge-legacy-modernization.git
 cd rustforge
 cargo build
 cargo test
@@ -68,7 +68,7 @@ pub struct YourParams {
 /// Main calculation function — must return Result<T, MigrationError>
 pub fn your_main_function(params: &YourParams) -> Result<YourResult, MigrationError> {
     validate_positive("field1", params.field1)?;
-    
+
     // Your implementation here
     Ok(YourResult { /* ... */ })
 }
@@ -76,17 +76,17 @@ pub fn your_main_function(params: &YourParams) -> Result<YourResult, MigrationEr
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+
     #[test]
     fn test_basic_case() {
         // At least 8 unit tests required
     }
-    
+
     #[test]
     fn test_edge_case_zero() {
         // Test zero/boundary values
     }
-    
+
     // More tests...
 }
 ```
@@ -165,11 +165,11 @@ Edit `tests/parity_tests.rs` and add tests that verify your module against legac
 fn test_your_module_parity_vs_legacy() {
     use rustforge::your_module::{your_main_function, YourParams};
     use rustforge::error::verify_parity;
-    
+
     // Run your_module with sample data
     let params = YourParams { field1: 100_000.0, field2: 1001 };
     let result = your_main_function(&params).unwrap();
-    
+
     // Compare to legacy COBOL/Fortran output
     let legacy_output = 105_000.0; // From running original COBOL/Fortran
     assert!(verify_parity("your_output_field", legacy_output, result.output, 1e-10).is_ok());
@@ -261,7 +261,7 @@ Every module migration **must** include parity tests proving numerical equivalen
 fn test_account_balance_parity() {
     use rustforge::account_balance::process_account;
     use rustforge::error::verify_parity;
-    
+
     // Legacy COBOL:
     // MOVE 100000 TO OPENING-BALANCE
     // MOVE 50000 TO TRANSACTION
@@ -269,10 +269,10 @@ fn test_account_balance_parity() {
     // COMPUTE RUNNING-BALANCE = OPENING-BALANCE + TRANSACTION  => 150000
     // COMPUTE INTEREST-EARNED = RUNNING-BALANCE * INTEREST-RATE => 5250
     // COMPUTE FINAL-BALANCE = RUNNING-BALANCE + INTEREST-EARNED => 155250
-    
-    let (running_bal, interest, final_bal) = 
+
+    let (running_bal, interest, final_bal) =
         process_account(100_000.0, 50_000.0, 0.035);
-    
+
     assert!(verify_parity("running_balance", 150_000.0, running_bal, 1e-10).is_ok());
     assert!(verify_parity("interest_earned", 5_250.0, interest, 1e-10).is_ok());
     assert!(verify_parity("final_balance", 155_250.0, final_bal, 1e-10).is_ok());
