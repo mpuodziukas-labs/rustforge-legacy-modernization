@@ -248,4 +248,13 @@ Scientific modules (MOD-002, MOD-005) use algorithm-specific tolerances: 1e-6 fo
 
 ---
 
+## Limitations
+
+- The legacy sources and migration modules are self-contained demonstration cases, not production codebases from any named organization.
+- Benchmark and ROI figures are measured/modelled on the bundled cases and stated cost assumptions; they are illustrative, not a guarantee for arbitrary workloads.
+- Parity is proven only over the enumerated test input space — it is a strong oracle-based check, not a formal proof of equivalence for all possible inputs.
+- This is a methodology and reference implementation, not a turnkey migration product.
+
+---
+
 *RustForge — because "it's too risky to modernize" is only true until someone proves otherwise.*
