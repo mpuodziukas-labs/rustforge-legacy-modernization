@@ -1,5 +1,5 @@
 # rustforge — CLAUDE.md
-<!-- VERIFIED: 2026-04-14 | WATCH: ~/Desktop/rustforge-legacy-modernization/Cargo.toml,~/Desktop/rustforge-legacy-modernization/src/lib.rs -->
+<!-- VERIFIED: 2026-04-14 | WATCH: Cargo.toml,src/lib.rs -->
 
 ## Identity
 TYPE:    cli + library
