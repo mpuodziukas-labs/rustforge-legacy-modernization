@@ -146,7 +146,7 @@ A migration that passes all 464 tests is not probably correct. It is **demonstra
 ## Quick Start
 
 ```bash
-git clone https://github.com/michaelpuodziukas/rustforge-legacy-modernization
+git clone https://github.com/mpuodziukas-labs/rustforge-legacy-modernization
 cd rustforge-legacy-modernization
 cargo test          # 464 tests, all green
 cargo run           # Demo all 5 migration modules
@@ -222,20 +222,11 @@ These are conservative estimates based on public Federal Reserve and FFIEC cost 
 
 ---
 
-## Engagement
+## Stack
 
 ```
-Available for:
-├── Enterprise modernization contracts ($75-120/hr C2C)
-├── Staff augmentation W2 ($140K-$215K)
-└── Fractional CTO / migration lead ($200K-$400K/engagement)
-
-Stack: Rust · COBOL · Fortran · Systems Architecture · Zero-Downtime Migration
-Verticals: Financial services · Scientific computing · Government (USDA/NOAA/DOE)
-Target clients: Luxoft · Unum · JPMorgan · Capgemini · USDA/Dynamo · Federal agencies
-
-Contact: Remote (Tucson, AZ) | Async-preferred | Response <24h
-GitHub: github.com/michaelpuodziukas
+Rust · COBOL · Fortran · Systems Architecture · Zero-Downtime Migration
+Verticals: Financial services · Scientific computing
 ```
 
 ---

@@ -3,8 +3,6 @@
 ## Overview
 Complete GitHub repository for demonstrating production-grade COBOL/Fortran to Rust modernization with 100% functional parity and 27x performance improvement.
 
-**Repository Location:** `/Users/michaelpuodziukas/Desktop/rustforge-legacy-modernization/`
-
 ## File Structure (17 files total)
 
 ### Configuration & Documentation (5 files)
@@ -262,27 +260,10 @@ cargo run --release
 
 All files are Git-ready:
 ```bash
-cd /Users/michaelpuodziukas/Desktop/rustforge-legacy-modernization/
 git init
 git add .
 git commit -m "RustForge: Complete legacy modernization project"
 ```
-
-## Usage for Job Applications
-
-**Portfolio Value:**
-- Demonstrates mastery of COBOL, Fortran, Rust
-- Shows performance optimization expertise (27x improvement)
-- Proves rigorous testing & verification (464 tests)
-- Quantified business impact ($4.8M/5yr)
-- Production-ready code (no tutorial level)
-
-**Talking Points:**
-1. "Modernized 5.2K lines of legacy code to 2.0K Rust with 100% parity"
-2. "27x performance improvement + 85% memory reduction"
-3. "464 integration tests, 100% pass rate"
-4. "Zero security vulnerabilities introduced"
-5. "$4.8M NPV justification for business case"
 
 ## Status
 
